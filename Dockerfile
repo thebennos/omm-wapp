@@ -10,6 +10,8 @@ RUN pip install -r requirements.txt
 
 # Copy our code from the current folder to /app inside the container
 ADD . /app
-
+ADD wappalyzer_scraper_rabbitmq.py /app/wappalyzer_scraper_rabbitmq.py
+ADD wappalyzer.py /app/wappalyzer.py
+ADD ./data /app/data
 # Define our command to be run when launching the container
 CMD ["python", "wappalyzer_scraper_rabbitmq.py -t 10"]
