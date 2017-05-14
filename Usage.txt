@@ -1,0 +1,2 @@
+Run wappalyzer_scraper_rabbitmq.py with argument -t followed by number of threads.
+Eg: wappalyzer_scraper_rabbitmq.py -t 16
