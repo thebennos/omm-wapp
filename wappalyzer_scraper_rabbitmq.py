@@ -1,5 +1,6 @@
 # Imports
 import pika
+from pika.exceptions import ConnectionClosed
 from wappalyzer import Wappalyzer, WebPage
 from threading import Thread
 import time
@@ -40,14 +41,19 @@ def callback(ch, method, properties, body):
 
 # RabbitMQ receive
 def rmq_receive():
-    credentials = pika.PlainCredentials(AMQP_USER, AMQP_PASS)
-    parameters = pika.ConnectionParameters(AMQP_HOST, AMQP_PORT, "/", credentials)
-    connection = pika.BlockingConnection(parameters)
-    channel = connection.channel()
-    channel.queue_declare(queue=AMQP_RECEIVE_QUEUE, durable=True)
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(callback, queue=AMQP_RECEIVE_QUEUE)
-    channel.start_consuming()
+    try:
+        credentials = pika.PlainCredentials(AMQP_USER, AMQP_PASS)
+        parameters = pika.ConnectionParameters(AMQP_HOST, AMQP_PORT, "/", credentials)
+        connection = pika.BlockingConnection(parameters)
+        channel = connection.channel()
+        channel.queue_declare(queue=AMQP_RECEIVE_QUEUE, durable=True)
+        channel.basic_qos(prefetch_count=1)
+        channel.basic_consume(callback, queue=AMQP_RECEIVE_QUEUE)
+        channel.start_consuming()
+
+    except ConnectionClosed:
+        print("Warning: Connection closed, reconnecting...")
+        rmq_receive()
 
 # RabbitMQ send
 def rmq_send(data):
