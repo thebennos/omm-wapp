@@ -24,6 +24,7 @@ def run_wappalyzer(domain):
 
     except Exception as e:
         print("Warning: Wappalyzer error {}".format(e))
+        return None
 
 # Callback
 def callback(ch, method, properties, body):
@@ -32,8 +33,9 @@ def callback(ch, method, properties, body):
     domain = msg["domain"]
     print("Received {}".format(domain))
     data = run_wappalyzer(domain)
-    data = json.dumps({"id": id, "wappalyzer_json": list(data), "checked": time.time()})
-    rmq_send(data)
+    if data:
+        data = json.dumps({"id": id, "wappalyzer_json": list(data), "checked": time.time()})
+        rmq_send(data)
     ch.basic_ack(delivery_tag = method.delivery_tag)
 
 # RabbitMQ receive
