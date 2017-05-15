@@ -2,7 +2,7 @@
 import pika
 from wappalyzer import Wappalyzer, WebPage
 from threading import Thread
-from datetime import datetime
+import time
 import json
 import sys
 
@@ -32,7 +32,7 @@ def callback(ch, method, properties, body):
     domain = msg["domain"]
     print("Received {}".format(domain))
     data = run_wappalyzer(domain)
-    data = json.dumps({"id": id, "wappalyzer_json": list(data), "checked": datetime.now()})
+    data = json.dumps({"id": id, "wappalyzer_json": list(data), "checked": time.time()})
     rmq_send(data)
     ch.basic_ack(delivery_tag = method.delivery_tag)
 
