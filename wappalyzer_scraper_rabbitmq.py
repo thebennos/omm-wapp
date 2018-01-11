@@ -62,7 +62,7 @@ def rmq_send(data):
     parameters = pika.ConnectionParameters(AMQP_HOST, AMQP_PORT, "/", credentials)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    channel.queue_declare(queue=AMQP_SEND_QUEUE, durable=True)
+    #channel.queue_declare(queue=AMQP_SEND_QUEUE, durable=True)
     channel.basic_publish(exchange="", routing_key=AMQP_SEND_QUEUE, body=data)
     connection.close()
 
