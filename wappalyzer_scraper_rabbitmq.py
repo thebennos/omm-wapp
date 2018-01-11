@@ -47,8 +47,8 @@ def rmq_receive():
         parameters = pika.ConnectionParameters(AMQP_HOST, AMQP_PORT, "/", credentials)
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
-        channel.queue_declare(queue=AMQP_RECEIVE_QUEUE, durable=True)
-        channel.basic_qos(prefetch_count=1)
+        #channel.queue_declare(queue=AMQP_RECEIVE_QUEUE, durable=True)
+        channel.basic_qos(prefetch_count=1000)
         channel.basic_consume(callback, queue=AMQP_RECEIVE_QUEUE)
         channel.start_consuming()
 
