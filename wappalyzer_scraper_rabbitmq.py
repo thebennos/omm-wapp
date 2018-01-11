@@ -6,12 +6,13 @@ from threading import Thread
 import time
 import json
 import sys
+import os
 
 # Basic settings
-AMQP_HOST = "85.25.103.85"
+AMQP_HOST = os.environ.get('AMQP_HOST', "12345")
 AMQP_PORT = 5672
-AMQP_USER = "domains"
-AMQP_PASS = "isdn300"
+AMQP_USER = os.environ.get('AMQP_USER', "12345")
+AMQP_PASS = os.environ.get('AMQP_PASS', "12345")
 AMQP_RECEIVE_QUEUE = "domains_inbox_wappalyzer"
 AMQP_SEND_QUEUE = "domains_outbox_wappalyzer"
 
